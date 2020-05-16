@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import './summary_screen.dart';
+import './screens/summary_screen.dart';
 
 void main() {
   runApp(MyApp());
