@@ -35,9 +35,16 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       tabBuilder: (context, index) {
-        return Center(
-          child: Text('Hello'),
-        );
+        return CupertinoTabView(builder: (_) {
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text('title here'),
+            ),
+            child: Center(
+              child: Text('hello world'),
+            ),
+          );
+        });
       },
     );
     /*
