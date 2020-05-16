@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import './summary_screen.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -36,14 +38,7 @@ class HomeScreen extends StatelessWidget {
       ),
       tabBuilder: (context, index) {
         return CupertinoTabView(builder: (_) {
-          return CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: Text('title here'),
-            ),
-            child: Center(
-              child: Text('hello world'),
-            ),
-          );
+          return SummaryScreen();
         });
       },
     );
