@@ -42,13 +42,5 @@ class HomeScreen extends StatelessWidget {
         });
       },
     );
-    /*
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text('Daisy Tracker'),
-      ),
-      child: Text('test'),
-    );
-    */
   }
 }
