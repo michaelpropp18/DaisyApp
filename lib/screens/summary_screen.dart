@@ -1,10 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/activity.dart';
 import '../widgets/date_divider.dart';
+import '../models/activity_model.dart';
 
 class SummaryScreen extends StatelessWidget {
+  final List<ActivityModel> activities = [
+    ActivityModel(ActivityType.Fed, DateTime.now()),
+    ActivityModel(ActivityType.Pooped, DateTime.now()),
+    ActivityModel(ActivityType.Peed, DateTime.now()),
+    ActivityModel(ActivityType.Fed, DateTime.now()),
+  ];
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -19,35 +27,17 @@ class SummaryScreen extends StatelessWidget {
         padding: EdgeInsets.all(5),
         child: ListView.builder(
           itemBuilder: (context, index) {
-            if (index % 10 == 0) {
-              return DateDivider('01/01/2020');
-            } else if (index == 29) {
-              return Center(
-                child: Text('Load more'),
-              );
-            } else if (index % 3 == 0) {
-              return Container(
-                height: 50,
-                width: double.infinity,
-                child: Activity(
-                  text: 'Pooped',
-                  time: '18:08',
-                  isTop: index == 1,
-                ),
-              );
-            } else {
-              return Container(
-                height: 50,
-                width: double.infinity,
-                child: Activity(
-                  text: 'Peed',
-                  time: '9:08',
-                  isTop: index == 1,
-                ),
-              );
-            }
+            return Container(
+              height: 50,
+              width: double.infinity,
+              child: Activity(
+                text: activities[index].text,
+                date: activities[index].date,
+                isTop: index == 0,
+              ),
+            );
           },
-          itemCount: 30,
+          itemCount: activities.length,
         ),
       ),
     );

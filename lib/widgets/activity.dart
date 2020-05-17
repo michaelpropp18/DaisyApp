@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Activity extends StatelessWidget {
   final String text;
-  final String time;
-  bool isTop;
+  final DateTime date;
+  final bool isTop;
 
-  Activity({@required this.text, @required this.time, this.isTop = false});
+  Activity({@required this.text, @required this.date, this.isTop = false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +16,14 @@ class Activity extends StatelessWidget {
         SizedBox(width: 15),
         Container(
           alignment: Alignment.centerRight,
-          width: 50,
-          child:
-              Text(time, style: TextStyle(color: Colors.black54, fontSize: 15)),
+          width: 75,
+          child: Text(
+            DateFormat.jm().format(date),
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 15,
+            ),
+          ),
         ),
         SizedBox(width: 10),
         Column(
