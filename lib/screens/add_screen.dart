@@ -23,17 +23,38 @@ class AddScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ActivityButton(icon: guidedog, text: 'Walk'),
-            ActivityButton(icon: fire_hydrant, text: 'Pee'),
-            ActivityButton(icon: poop, text: 'Poop'),
-            ActivityButton(icon: Icons.restaurant, text: 'Fed'),
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ActivityButton(icon: guidedog, text: 'Walk'),
+                ActivityButton(icon: fire_hydrant, text: 'Pee'),
+                ActivityButton(icon: poop, text: 'Poop'),
+                ActivityButton(icon: Icons.restaurant, text: 'Fed'),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            height: 130,
+            width: 350,
+            child: CupertinoDatePicker(
+              maximumDate: DateTime.now(),
+              minuteInterval: 5,
+              mode: CupertinoDatePickerMode.time,
+              initialDateTime: DateTime.now(),
+              onDateTimeChanged: (newDateTime) {
+                print('yay');
+              },
+            ),
+          ),
+          
+        ],
       ),
     );
   }
