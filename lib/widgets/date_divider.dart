@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DateDivider extends StatelessWidget {
-  final String date;
+  final DateTime date;
 
   const DateDivider(this.date);
 
@@ -12,7 +13,8 @@ class DateDivider extends StatelessWidget {
       height: 25,
       width: double.infinity,
       child: Center(
-        child: Text(date, style: TextStyle(color: Colors.white)),
+        child: Text(DateFormat.yMMMMd('en_US').format(date),
+            style: TextStyle(color: Colors.white)),
       ),
     );
   }

@@ -8,11 +8,34 @@ import '../models/activity_model.dart';
 
 class SummaryScreen extends StatelessWidget {
   final List<ActivityModel> activities = [
-    ActivityModel(ActivityType.Fed, DateTime.now()),
-    ActivityModel(ActivityType.Pooped, DateTime.now()),
-    ActivityModel(ActivityType.Peed, DateTime.now()),
-    ActivityModel(ActivityType.Fed, DateTime.now()),
+    ActivityModel(ActivityType.Walk,
+        DateTime.now()),
+    ActivityModel(ActivityType.Peed,
+        DateTime.now().subtract(Duration(minutes: 50))),
+    ActivityModel(ActivityType.Peed,
+        DateTime.now().subtract(Duration(hours: 17))),
+    ActivityModel(ActivityType.Pooped,
+        DateTime.now().subtract(Duration(hours: 20))),
+    ActivityModel(ActivityType.Peed,
+        DateTime.now().subtract(Duration(days: 1))),
+    ActivityModel(ActivityType.Walk,
+        DateTime.now().subtract(Duration(days: 1, minutes: 16))),
+    ActivityModel(ActivityType.Fed,
+        DateTime.now().subtract(Duration(days: 1, minutes: 89))),
   ];
+
+  Widget ActivityContainer(int index) {
+    return Container(
+      height: 50,
+      width: double.infinity,
+      child: Activity(
+        text: activities[index].text,
+        date: activities[index].date,
+        isTop: index == 0,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -27,15 +50,24 @@ class SummaryScreen extends StatelessWidget {
         padding: EdgeInsets.all(5),
         child: ListView.builder(
           itemBuilder: (context, index) {
-            return Container(
-              height: 50,
-              width: double.infinity,
-              child: Activity(
-                text: activities[index].text,
-                date: activities[index].date,
-                isTop: index == 0,
-              ),
-            );
+            if (index == 0) {
+              return Column(
+                children: <Widget>[
+                  DateDivider(activities[index].date),
+                  ActivityContainer(index),
+                ],
+              );
+            } else if (index > 0 &&
+                activities[index].date.day != activities[index - 1].date.day) {
+              return Column(
+                children: <Widget>[
+                  DateDivider(activities[index].date),
+                  ActivityContainer(index),
+                ],
+              );
+            } else {
+              return ActivityContainer(index);
+            }
           },
           itemCount: activities.length,
         ),
