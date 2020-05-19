@@ -21,6 +21,16 @@ class _AddScreenState extends State<AddScreen> {
     ActivityType.Fed: false,
   };
 
+  bool itemSelected() {
+    bool returnVal = false;
+    selectedActivities.forEach((k, v) {
+      if (v) {
+        returnVal = true;
+      }
+    });
+    return returnVal;
+  }
+
   void updateNewTime(DateTime newTime) {
     setState(() => entryTime = newTime);
   }
@@ -129,18 +139,27 @@ class _AddScreenState extends State<AddScreen> {
               disabledColor: Colors.grey,
               child: Text('Add Entry'),
               onPressed: () {
-                addEntry();
                 showCupertinoDialog(
                     context: context,
                     builder: (ctx) => CupertinoAlertDialog(
-                          title: Text('Activity Added'),
+                          title: Text(itemSelected()
+                              ? 'Activity Added'
+                              : 'Please select an activity'),
                           actions: <Widget>[
                             CupertinoDialogAction(
                               child: Text('Ok'),
                               onPressed: () {
                                 Navigator.of(ctx).pop();
+                                addEntry();
                               },
                             ),
+                            if (itemSelected())
+                              CupertinoDialogAction(
+                                child: Text('Undo'),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                },
+                              ),
                           ],
                         ));
               },
