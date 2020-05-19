@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../widgets/activity_button.dart';
 import '../widgets/edit_time.dart';
+import '../models/activity_model.dart';
 
 class AddScreen extends StatefulWidget {
   @override
@@ -13,10 +14,20 @@ class AddScreen extends StatefulWidget {
 
 class _AddScreenState extends State<AddScreen> {
   DateTime entryTime;
+  Map<ActivityType, bool> selectedActivities = {
+    ActivityType.Pooped: false,
+    ActivityType.Peed: false,
+    ActivityType.Walk: false,
+    ActivityType.Fed: false,
+  };
 
   void updateNewTime(DateTime newTime) {
-    print(newTime);
     setState(() => entryTime = newTime);
+  }
+
+  void updateSelectedActivities(ActivityType activityType) {
+    setState(() =>
+        selectedActivities[activityType] = !selectedActivities[activityType]);
   }
 
   @override
@@ -41,25 +52,56 @@ class _AddScreenState extends State<AddScreen> {
       ),
       child: Column(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              ActivityButton(icon: guidedog, text: 'Walk'),
-              ActivityButton(icon: Icons.restaurant, text: 'Fed'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              ActivityButton(icon: fire_hydrant, text: 'Pee'),
-              ActivityButton(icon: poop, text: 'Poop'),
-            ],
+          Expanded(
+            flex: 2,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      ActivityButton(
+                        icon: guidedog,
+                        text: 'Walk',
+                        selected: selectedActivities[ActivityType.Walk],
+                        onPressed: () =>
+                            updateSelectedActivities(ActivityType.Walk),
+                      ),
+                      ActivityButton(
+                        icon: Icons.restaurant,
+                        text: 'Fed',
+                        selected: selectedActivities[ActivityType.Fed],
+                        onPressed: () =>
+                            updateSelectedActivities(ActivityType.Fed),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      ActivityButton(
+                        icon: fire_hydrant,
+                        text: 'Pee',
+                        selected: selectedActivities[ActivityType.Peed],
+                        onPressed: () =>
+                            updateSelectedActivities(ActivityType.Peed),
+                      ),
+                      ActivityButton(
+                        icon: poop,
+                        text: 'Poop',
+                        selected: selectedActivities[ActivityType.Pooped],
+                        onPressed: () =>
+                            updateSelectedActivities(ActivityType.Pooped),
+                      ),
+                    ],
+                  ),
+                ]),
           ),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Time: ' + DateFormat.jm().format(entryTime)),
+                Text('Time: ' + DateFormat.jm().format(entryTime), style: TextStyle(fontSize: 20)),
                 SizedBox(
                   width: 10,
                 ),
@@ -67,13 +109,16 @@ class _AddScreenState extends State<AddScreen> {
               ],
             ),
           ),
-          CupertinoButton(
-            color: Color.fromRGBO(53, 74, 95, 1),
-            disabledColor: Colors.grey,
-            child: Text('Add Entry'),
-            onPressed: () {
-              print('got here');
-            },
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: CupertinoButton(
+              color: Color.fromRGBO(53, 74, 95, 1),
+              disabledColor: Colors.grey,
+              child: Text('Add Entry'),
+              onPressed: () {
+                print('got here');
+              },
+            ),
           ),
           SizedBox(height: kBottomNavigationBarHeight),
         ],
