@@ -30,6 +30,18 @@ class _AddScreenState extends State<AddScreen> {
         selectedActivities[activityType] = !selectedActivities[activityType]);
   }
 
+  void addEntry() {
+    setState(() {
+      selectedActivities = {
+        ActivityType.Pooped: false,
+        ActivityType.Peed: false,
+        ActivityType.Walk: false,
+        ActivityType.Fed: false,
+      };
+      entryTime = DateTime.now();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const IconData guidedog =
@@ -46,7 +58,7 @@ class _AddScreenState extends State<AddScreen> {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: Color.fromRGBO(53, 74, 95, 1),
         middle: Text(
-          'Daisy Tracker',
+          'Add Entry',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -101,7 +113,8 @@ class _AddScreenState extends State<AddScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Time: ' + DateFormat.jm().format(entryTime), style: TextStyle(fontSize: 20)),
+                Text('Time: ' + DateFormat.jm().format(entryTime),
+                    style: TextStyle(fontSize: 20)),
                 SizedBox(
                   width: 10,
                 ),
@@ -116,7 +129,20 @@ class _AddScreenState extends State<AddScreen> {
               disabledColor: Colors.grey,
               child: Text('Add Entry'),
               onPressed: () {
-                print('got here');
+                addEntry();
+                showCupertinoDialog(
+                    context: context,
+                    builder: (ctx) => CupertinoAlertDialog(
+                          title: Text('Activity Added'),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text('Ok'),
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                            ),
+                          ],
+                        ));
               },
             ),
           ),
