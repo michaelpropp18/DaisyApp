@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+
+import '../widgets/activity_button.dart';
 
 class AddScreen extends StatelessWidget {
   @override
@@ -25,27 +28,44 @@ class AddScreen extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
+          Expanded(
+            child: GridView.count(
+              primary: false,
+              padding: const EdgeInsets.all(20),
+              crossAxisSpacing: 30,
+              mainAxisSpacing: 0,
+              crossAxisCount: 2,
+              children: <Widget>[
                 ActivityButton(icon: guidedog, text: 'Walk'),
+                ActivityButton(icon: Icons.restaurant, text: 'Fed'),
                 ActivityButton(icon: fire_hydrant, text: 'Pee'),
                 ActivityButton(icon: poop, text: 'Poop'),
-                ActivityButton(icon: Icons.restaurant, text: 'Fed'),
               ],
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Time: ' + DateFormat.jm().format(DateTime.now())),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                CupertinoIcons.pen,
+                color: Color.fromRGBO(53, 74, 95, 1),
+                size: 20,
+              ),
+            ],
           ),
           SizedBox(
             height: 30,
           ),
+          /*
           Container(
             height: 130,
             width: 350,
             child: CupertinoDatePicker(
               maximumDate: DateTime.now(),
-              minuteInterval: 5,
               mode: CupertinoDatePickerMode.time,
               initialDateTime: DateTime.now(),
               onDateTimeChanged: (newDateTime) {
@@ -53,51 +73,30 @@ class AddScreen extends StatelessWidget {
               },
             ),
           ),
-          
+          */
+          MyPrefilledText(),
         ],
       ),
     );
   }
 }
 
-class ActivityButton extends StatefulWidget {
-  final IconData icon;
-  final String text;
-  bool selected;
-  ActivityButton(
-      {@required this.icon, @required this.text, this.selected = false});
-
+class MyPrefilledText extends StatefulWidget {
   @override
-  _ActivityButtonState createState() => _ActivityButtonState();
+  _MyPrefilledTextState createState() => _MyPrefilledTextState();
 }
 
-class _ActivityButtonState extends State<ActivityButton> {
+class _MyPrefilledTextState extends State<MyPrefilledText> {
+  TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: 'initial text');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          widget.selected = !widget.selected;
-        });
-      },
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 60,
-            height: 60,
-            decoration: new BoxDecoration(
-              color: widget.selected ? Colors.green : Colors.black12,
-              borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
-              border: new Border.all(
-                color: widget.selected ? Colors.greenAccent : Colors.black26,
-                width: 4.0,
-              ),
-            ),
-            child: Icon(widget.icon, color: Color.fromRGBO(53, 74, 95, 1)),
-          ),
-          Text(widget.text),
-        ],
-      ),
-    );
+    return CupertinoTextField(controller: _textController);
   }
 }
