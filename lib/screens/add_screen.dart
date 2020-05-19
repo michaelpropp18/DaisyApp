@@ -4,8 +4,21 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/activity_button.dart';
+import '../widgets/edit_time.dart';
 
-class AddScreen extends StatelessWidget {
+class AddScreen extends StatefulWidget {
+  @override
+  _AddScreenState createState() => _AddScreenState();
+}
+
+class _AddScreenState extends State<AddScreen> {
+  DateTime entryTime;
+
+  void updateNewTime(DateTime newTime) {
+    print(newTime);
+    setState(() => entryTime = newTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     const IconData guidedog =
@@ -14,6 +27,9 @@ class AddScreen extends StatelessWidget {
         IconData(0xe801, fontFamily: 'MyFlutterApp', fontPackage: null);
     const IconData poop =
         IconData(0xf619, fontFamily: 'MyFlutterApp', fontPackage: null);
+    if (entryTime == null) {
+      entryTime = DateTime.now();
+    }
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -43,44 +59,11 @@ class AddScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Time: ' + DateFormat.jm().format(DateTime.now())),
+                Text('Time: ' + DateFormat.jm().format(entryTime)),
                 SizedBox(
                   width: 10,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    showCupertinoModalPopup(
-                        context: context,
-                        builder: (ctx) => CupertinoPopupSurface(
-                              child: Container(
-                                height: 200,
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text('Enter a new time:'),
-                                    ),
-                                    Expanded(
-                                      child: CupertinoDatePicker(
-                                        maximumDate: DateTime.now(),
-                                        mode: CupertinoDatePickerMode.time,
-                                        initialDateTime: DateTime.now(),
-                                        onDateTimeChanged: (newDateTime) {
-                                          print('got here');
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ));
-                  },
-                  child: Icon(
-                    CupertinoIcons.pen,
-                    color: Color.fromRGBO(53, 74, 95, 1),
-                    size: 20,
-                  ),
-                ),
+                EditTime(entryTime, updateNewTime),
               ],
             ),
           ),
@@ -93,44 +76,8 @@ class AddScreen extends StatelessWidget {
             },
           ),
           SizedBox(height: kBottomNavigationBarHeight),
-
-          /*
-          Container(
-            height: 130,
-            width: 350,
-            child: CupertinoDatePicker(
-              maximumDate: DateTime.now(),
-              mode: CupertinoDatePickerMode.time,
-              initialDateTime: DateTime.now(),
-              onDateTimeChanged: (newDateTime) {
-                print('yay');
-              },
-            ),
-          ),
-          */
-          //MyPrefilledText(),
         ],
       ),
     );
-  }
-}
-
-class MyPrefilledText extends StatefulWidget {
-  @override
-  _MyPrefilledTextState createState() => _MyPrefilledTextState();
-}
-
-class _MyPrefilledTextState extends State<MyPrefilledText> {
-  TextEditingController _textController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textController = TextEditingController(text: 'initial text');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoTextField(controller: _textController);
   }
 }
