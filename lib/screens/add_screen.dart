@@ -8,15 +8,12 @@ import '../widgets/activity_button.dart';
 class AddScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const _kFontFam = 'MyFlutterApp';
-    const _kFontPkg = null;
-
     const IconData guidedog =
-        IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+        IconData(0xe800, fontFamily: 'MyFlutterApp', fontPackage: null);
     const IconData fire_hydrant =
-        IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+        IconData(0xe801, fontFamily: 'MyFlutterApp', fontPackage: null);
     const IconData poop =
-        IconData(0xf619, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+        IconData(0xf619, fontFamily: 'MyFlutterApp', fontPackage: null);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -28,38 +25,75 @@ class AddScreen extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ActivityButton(icon: guidedog, text: 'Walk'),
+              ActivityButton(icon: Icons.restaurant, text: 'Fed'),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ActivityButton(icon: fire_hydrant, text: 'Pee'),
+              ActivityButton(icon: poop, text: 'Poop'),
+            ],
+          ),
           Expanded(
-            child: GridView.count(
-              primary: false,
-              padding: const EdgeInsets.all(20),
-              crossAxisSpacing: 30,
-              mainAxisSpacing: 0,
-              crossAxisCount: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ActivityButton(icon: guidedog, text: 'Walk'),
-                ActivityButton(icon: Icons.restaurant, text: 'Fed'),
-                ActivityButton(icon: fire_hydrant, text: 'Pee'),
-                ActivityButton(icon: poop, text: 'Poop'),
+                Text('Time: ' + DateFormat.jm().format(DateTime.now())),
+                SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showCupertinoModalPopup(
+                        context: context,
+                        builder: (ctx) => CupertinoPopupSurface(
+                              child: Container(
+                                height: 200,
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text('Enter a new time:'),
+                                    ),
+                                    Expanded(
+                                      child: CupertinoDatePicker(
+                                        maximumDate: DateTime.now(),
+                                        mode: CupertinoDatePickerMode.time,
+                                        initialDateTime: DateTime.now(),
+                                        onDateTimeChanged: (newDateTime) {
+                                          print('got here');
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                  },
+                  child: Icon(
+                    CupertinoIcons.pen,
+                    color: Color.fromRGBO(53, 74, 95, 1),
+                    size: 20,
+                  ),
+                ),
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Time: ' + DateFormat.jm().format(DateTime.now())),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                CupertinoIcons.pen,
-                color: Color.fromRGBO(53, 74, 95, 1),
-                size: 20,
-              ),
-            ],
+          CupertinoButton(
+            color: Color.fromRGBO(53, 74, 95, 1),
+            disabledColor: Colors.grey,
+            child: Text('Add Entry'),
+            onPressed: () {
+              print('got here');
+            },
           ),
-          SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: kBottomNavigationBarHeight),
+
           /*
           Container(
             height: 130,
@@ -74,7 +108,7 @@ class AddScreen extends StatelessWidget {
             ),
           ),
           */
-          MyPrefilledText(),
+          //MyPrefilledText(),
         ],
       ),
     );
