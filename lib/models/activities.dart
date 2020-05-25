@@ -5,10 +5,16 @@ import 'dart:convert';
 import 'activity_model.dart';
 
 class Activities with ChangeNotifier {
+  static const maxItems = 100;
+
   List<ActivityModel> _items = [];
 
   List<ActivityModel> get items {
     return [..._items];
+  }
+
+  void sort() {
+    _items.sort((a, b) => b.dateTime.compareTo(a.dateTime));
   }
 
   Future<void> addItem(String type, DateTime entryTime) async {
@@ -24,6 +30,7 @@ class Activities with ChangeNotifier {
       final newActivity = ActivityModel(
           json.decode(response.body)['name'], type, entryTime);
       _items.insert(0, newActivity);
+      sort();
       notifyListeners();
     } catch (error) {
       print(error);
@@ -35,6 +42,9 @@ class Activities with ChangeNotifier {
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     final List<ActivityModel> loadedItems = [];
+    if (extractedData == null) {
+      return;
+    }
     extractedData.forEach((id, value) {
       loadedItems.add(ActivityModel(
         id,
@@ -43,6 +53,7 @@ class Activities with ChangeNotifier {
       ));
     });
     _items = loadedItems;
+    sort();
     notifyListeners();
   }
 }

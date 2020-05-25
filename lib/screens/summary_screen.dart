@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 import '../widgets/activity.dart';
 import '../widgets/date_divider.dart';
-import '../models/activity_model.dart';
 import '../models/activities.dart';
 
 class SummaryScreen extends StatefulWidget {

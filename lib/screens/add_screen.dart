@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../widgets/activity_button.dart';
 import '../widgets/edit_time.dart';
-import '../models/activity_model.dart';
 import '../models/activities.dart';
 
 class AddScreen extends StatefulWidget {
