@@ -1,10 +1,15 @@
-import 'package:daisy_app/screens/settings_screen.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import './screens/summary_screen.dart';
 import './screens/add_screen.dart';
+import './screens/settings_screen.dart';
+import './models/activities.dart';
+import './models/users.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,10 +18,22 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    return CupertinoApp(
-      home: HomeScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Activities(),
+          //use value for existing objects & lists
+          //use create for new objectss
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Users(),
+          //use value for existing objects & lists
+          //use create for new objects
+        ),
+      ],
+      child: CupertinoApp(
+        home: HomeScreen(),
+      ),
     );
   }
 }

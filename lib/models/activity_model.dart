@@ -1,47 +1,19 @@
-enum ActivityType {
-  Pooped,
-  Peed,
-  Fed,
-  Walk,
-}
-
 class ActivityModel {
-  final ActivityType _type;
-  final DateTime _date;
+  final String _type;
+  final DateTime _dateTime;
+  final String _id;
 
-  ActivityModel(this._type, this._date);
+  ActivityModel(this._id, this._type, this._dateTime);
 
-  DateTime get date {
-    return _date;
+  DateTime get dateTime {
+    return _dateTime;
   }
 
-  String get text {
-    switch (_type) {
-      case ActivityType.Pooped:
-        {
-          return 'Pooped';
-        }
-        break;
-      case ActivityType.Peed:
-        {
-          return 'Peed';
-        }
-        break;
-      case ActivityType.Fed:
-        {
-          return 'Fed';
-        }
-        break;
-      case ActivityType.Walk:
-        {
-          return 'Walk';
-        }
-        break;
-      default:
-        {
-          return 'Other';
-        }
-        break;
-    }
+  String get type {
+    return _type;
+  }
+
+  String get id {
+    return _id;
   }
 }
