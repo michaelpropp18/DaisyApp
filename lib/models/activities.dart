@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'activity_model.dart';
+import 'activity.dart';
 
 class Activities with ChangeNotifier {
   static const maxItems = 100;
 
-  List<ActivityModel> _items = [];
+  List<Activity> _items = [];
 
-  List<ActivityModel> get items {
+  List<Activity> get items {
     return [..._items];
   }
 
@@ -27,8 +27,8 @@ class Activities with ChangeNotifier {
               'type': type,
             },
           ));
-      final newActivity = ActivityModel(
-          json.decode(response.body)['name'], type, entryTime);
+      final newActivity =
+          Activity(json.decode(response.body)['name'], type, entryTime);
       _items.insert(0, newActivity);
       sort();
       notifyListeners();
@@ -37,16 +37,22 @@ class Activities with ChangeNotifier {
     }
   }
 
+  Future<void> removeItem(String id) async {
+    _items.removeWhere((e) => e.id == id);
+    notifyListeners();
+    //const url = 'https://daisy-app-e36d5.firebaseio.com/activities.json';
+  }
+
   Future<void> fetchAndSetItems() async {
     const url = 'https://daisy-app-e36d5.firebaseio.com/activities.json';
     final response = await http.get(url);
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
-    final List<ActivityModel> loadedItems = [];
+    final List<Activity> loadedItems = [];
     if (extractedData == null) {
       return;
     }
     extractedData.forEach((id, value) {
-      loadedItems.add(ActivityModel(
+      loadedItems.add(Activity(
         id,
         value['type'],
         DateTime.parse(value['time']),

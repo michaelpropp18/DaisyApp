@@ -1,9 +1,9 @@
-class ActivityModel {
+class Activity {
   final String _type;
   final DateTime _dateTime;
   final String _id;
 
-  ActivityModel(this._id, this._type, this._dateTime);
+  Activity(this._id, this._type, this._dateTime);
 
   DateTime get dateTime {
     return _dateTime;
