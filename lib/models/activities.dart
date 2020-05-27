@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'activity.dart';
-import 'users.dart';
 
 class Activities with ChangeNotifier {
   static const maxItems = 100;
@@ -19,7 +18,6 @@ class Activities with ChangeNotifier {
   }
 
   Future<void> addItem(String type, DateTime entryTime) async {
-    print(Users.userKey);
     const url = 'https://daisy-app-e36d5.firebaseio.com/activities.json';
     try {
       final response = await http.post(url,
@@ -27,16 +25,12 @@ class Activities with ChangeNotifier {
             {
               'time': entryTime.toString(),
               'type': type,
-              'userId': Users.user.id,
-              'color': Users.user.color.value.toRadixString(16),
             },
           ));
       final newActivity = Activity(
         id: json.decode(response.body)['name'],
         type: type,
         dateTime: entryTime,
-        userId: Users.user.id,
-        color: Users.user.color,
       );
       _items.insert(0, newActivity);
       sort();
@@ -74,23 +68,14 @@ class Activities with ChangeNotifier {
       return;
     }
     extractedData.forEach((id, value) {
-      final act = Activity(
+      loadedItems.add(Activity(
         id: id,
         type: value['type'],
         dateTime: DateTime.parse(value['time']),
-      );
-      if (value['color'] != null) {
-        act.color = _colorFromHex(value['color']);
-      }
-      loadedItems.add(act);
+      ));
     });
     _items = loadedItems;
     sort();
     notifyListeners();
-  }
-
-  Color _colorFromHex(String hexColor) {
-    final hexCode = hexColor.replaceAll('#', '');
-    return Color(int.parse('FF$hexCode', radix: 16));
   }
 }

@@ -10,7 +10,9 @@ import '../models/activities.dart';
 
 class AddScreen extends StatefulWidget {
   @override
-  _AddScreenState createState() => _AddScreenState();
+  _AddScreenState createState() {
+    return _AddScreenState();
+  }
 }
 
 class _AddScreenState extends State<AddScreen> {
@@ -88,15 +90,13 @@ class _AddScreenState extends State<AddScreen> {
                         icon: guidedog,
                         text: 'Walk',
                         selected: selectedActivities['Walk'],
-                        onPressed: () =>
-                            updateSelectedActivities('Walk'),
+                        onPressed: () => updateSelectedActivities('Walk'),
                       ),
                       ActivityButton(
                         icon: Icons.restaurant,
                         text: 'Fed',
                         selected: selectedActivities['Fed'],
-                        onPressed: () =>
-                            updateSelectedActivities('Fed'),
+                        onPressed: () => updateSelectedActivities('Fed'),
                       ),
                     ],
                   ),
@@ -107,15 +107,13 @@ class _AddScreenState extends State<AddScreen> {
                         icon: fire_hydrant,
                         text: 'Pee',
                         selected: selectedActivities['Peed'],
-                        onPressed: () =>
-                            updateSelectedActivities('Peed'),
+                        onPressed: () => updateSelectedActivities('Peed'),
                       ),
                       ActivityButton(
                         icon: poop,
                         text: 'Poop',
                         selected: selectedActivities['Pooped'],
-                        onPressed: () =>
-                            updateSelectedActivities('Pooped'),
+                        onPressed: () => updateSelectedActivities('Pooped'),
                       ),
                     ],
                   ),

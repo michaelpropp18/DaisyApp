@@ -10,7 +10,5 @@ class Activity {
   Activity(
       {@required this.id,
       @required this.type,
-      @required this.dateTime,
-      this.userId,
-      this.color});
+      @required this.dateTime});
 }

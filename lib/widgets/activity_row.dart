@@ -5,9 +5,8 @@ class ActivityRow extends StatelessWidget {
   final String text;
   final DateTime date;
   final bool isTop;
-  final Color color;
 
-  ActivityRow({@required this.text, @required this.date, this.isTop = false, this.color});
+  ActivityRow({@required this.text, @required this.date, this.isTop = false});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class ActivityRow extends StatelessWidget {
               ),
               ClipOval(
                 child: Material(
-                  color: color == null ? Color.fromRGBO(53, 74, 95, 1) : color,
+                  color: Color.fromRGBO(53, 74, 95, 1),
                   child: SizedBox(width: 10, height: 10),
                 ),
               ),

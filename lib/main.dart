@@ -5,12 +5,9 @@ import 'package:flutter/material.dart';
 
 import './screens/summary_screen.dart';
 import './screens/add_screen.dart';
-import './screens/settings_screen.dart';
 import './models/activities.dart';
-import './models/users.dart';
 
 void main() {
-  //SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
 
@@ -23,16 +20,6 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Activities(),
           //use value for existing objects & lists
           //use create for new objectss
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => Users(),
-          //use value for existing objects & lists
-          //use create for new objects
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => Users(),
-          //use value for existing objects & lists
-          //use create for new objects
         ),
       ],
       child: CupertinoApp(
@@ -56,10 +43,6 @@ class HomeScreen extends StatelessWidget {
             icon: Icon(CupertinoIcons.add_circled),
             title: Text('Add'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.settings),
-            title: Text('Settings'),
-          ),
         ],
       ),
       tabBuilder: (context, index) {
@@ -73,11 +56,6 @@ class HomeScreen extends StatelessWidget {
           case 1:
             returnValue = CupertinoTabView(builder: (_) {
               return AddScreen();
-            });
-            break;
-          case 2:
-            returnValue = CupertinoTabView(builder: (_) {
-              return SettingsScreen();
             });
             break;
           default:
