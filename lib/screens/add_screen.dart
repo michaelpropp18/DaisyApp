@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/activity_button.dart';
 import '../widgets/edit_time.dart';
-import '../models/activity_model.dart';
+import '../models/activities.dart';
 
 class AddScreen extends StatefulWidget {
   @override
@@ -14,11 +15,11 @@ class AddScreen extends StatefulWidget {
 
 class _AddScreenState extends State<AddScreen> {
   DateTime entryTime;
-  Map<ActivityType, bool> selectedActivities = {
-    ActivityType.Pooped: false,
-    ActivityType.Peed: false,
-    ActivityType.Walk: false,
-    ActivityType.Fed: false,
+  Map<String, bool> selectedActivities = {
+    'Pooped': false,
+    'Peed': false,
+    'Walk': false,
+    'Fed': false,
   };
 
   bool itemSelected() {
@@ -35,18 +36,18 @@ class _AddScreenState extends State<AddScreen> {
     setState(() => entryTime = newTime);
   }
 
-  void updateSelectedActivities(ActivityType activityType) {
+  void updateSelectedActivities(String activityType) {
     setState(() =>
         selectedActivities[activityType] = !selectedActivities[activityType]);
   }
 
-  void addEntry() {
+  void reset() {
     setState(() {
       selectedActivities = {
-        ActivityType.Pooped: false,
-        ActivityType.Peed: false,
-        ActivityType.Walk: false,
-        ActivityType.Fed: false,
+        'Pooped': false,
+        'Peed': false,
+        'Walk': false,
+        'Fed': false,
       };
       entryTime = DateTime.now();
     });
@@ -54,6 +55,7 @@ class _AddScreenState extends State<AddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final activities = Provider.of<Activities>(context);
     const IconData guidedog =
         IconData(0xe800, fontFamily: 'MyFlutterApp', fontPackage: null);
     const IconData fire_hydrant =
@@ -85,16 +87,16 @@ class _AddScreenState extends State<AddScreen> {
                       ActivityButton(
                         icon: guidedog,
                         text: 'Walk',
-                        selected: selectedActivities[ActivityType.Walk],
+                        selected: selectedActivities['Walk'],
                         onPressed: () =>
-                            updateSelectedActivities(ActivityType.Walk),
+                            updateSelectedActivities('Walk'),
                       ),
                       ActivityButton(
                         icon: Icons.restaurant,
                         text: 'Fed',
-                        selected: selectedActivities[ActivityType.Fed],
+                        selected: selectedActivities['Fed'],
                         onPressed: () =>
-                            updateSelectedActivities(ActivityType.Fed),
+                            updateSelectedActivities('Fed'),
                       ),
                     ],
                   ),
@@ -104,16 +106,16 @@ class _AddScreenState extends State<AddScreen> {
                       ActivityButton(
                         icon: fire_hydrant,
                         text: 'Pee',
-                        selected: selectedActivities[ActivityType.Peed],
+                        selected: selectedActivities['Peed'],
                         onPressed: () =>
-                            updateSelectedActivities(ActivityType.Peed),
+                            updateSelectedActivities('Peed'),
                       ),
                       ActivityButton(
                         icon: poop,
                         text: 'Poop',
-                        selected: selectedActivities[ActivityType.Pooped],
+                        selected: selectedActivities['Pooped'],
                         onPressed: () =>
-                            updateSelectedActivities(ActivityType.Pooped),
+                            updateSelectedActivities('Pooped'),
                       ),
                     ],
                   ),
@@ -139,6 +141,13 @@ class _AddScreenState extends State<AddScreen> {
               disabledColor: Colors.grey,
               child: Text('Add Entry'),
               onPressed: () {
+                if (itemSelected()) {
+                  selectedActivities.forEach((k, v) {
+                    if (v) {
+                      activities.addItem(k, entryTime);
+                    }
+                  });
+                }
                 showCupertinoDialog(
                     context: context,
                     builder: (ctx) => CupertinoAlertDialog(
@@ -150,16 +159,9 @@ class _AddScreenState extends State<AddScreen> {
                               child: Text('Ok'),
                               onPressed: () {
                                 Navigator.of(ctx).pop();
-                                addEntry();
+                                reset();
                               },
                             ),
-                            if (itemSelected())
-                              CupertinoDialogAction(
-                                child: Text('Undo'),
-                                onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                },
-                              ),
                           ],
                         ));
               },
