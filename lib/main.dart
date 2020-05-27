@@ -9,25 +9,10 @@ import './screens/settings_screen.dart';
 import './models/activities.dart';
 import './models/users.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 void main() {
-  SharedPreferences.setMockInitialValues({});
+  //SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
-/*
-String test;
-
-Future<int> getUserKeyFromSharedPref() async {
-  final prefs = await SharedPreferences.getInstance();
-  final number = prefs.getInt('startupNumber');
-  if (number == null) {
-    return 0;
-  } else {
-    return 1;
-  }
-}
-*/
 
 class MyApp extends StatelessWidget {
   @override

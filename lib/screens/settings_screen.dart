@@ -26,7 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.initState();
   }
 
-  Color selectedColor = Colors.red;
+  Color selectedColor = Users.user == null ? Color.fromRGBO(53, 74, 95, 1) : Users.user.color;
   var colors = [
     Colors.red,
     Colors.orange,
