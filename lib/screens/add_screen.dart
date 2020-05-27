@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/activity_button.dart';
@@ -128,17 +127,7 @@ class _AddScreenState extends State<AddScreen> {
                 ]),
           ),
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Time: ' + DateFormat.jm().format(entryTime),
-                    style: TextStyle(fontSize: 20)),
-                SizedBox(
-                  width: 10,
-                ),
-                EditTime(entryTime, updateNewTime),
-              ],
-            ),
+            child: EditTime(entryTime, updateNewTime),
           ),
           Padding(
             padding: const EdgeInsets.all(20),
@@ -173,7 +162,7 @@ class _AddScreenState extends State<AddScreen> {
               },
             ),
           ),
-          SizedBox(height: kBottomNavigationBarHeight),
+          SizedBox(height: 2 * kBottomNavigationBarHeight),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EditTime extends StatelessWidget {
   final Function updateNewTime;
@@ -15,7 +16,7 @@ class EditTime extends StatelessWidget {
           context: context,
           builder: (ctx) => CupertinoPopupSurface(
             child: Container(
-              height: 200,
+              height: 250,
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -38,10 +39,20 @@ class EditTime extends StatelessWidget {
           ),
         );
       },
-      child: Icon(
-        CupertinoIcons.pen,
-        color: Color.fromRGBO(53, 74, 95, 1),
-        size: 20,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Time: ' + DateFormat.jm().format(originalTime),
+              style: TextStyle(fontSize: 20)),
+          SizedBox(
+            width: 10,
+          ),
+          Icon(
+            CupertinoIcons.pen,
+            color: Color.fromRGBO(53, 74, 95, 1),
+            size: 20,
+          ),
+        ],
       ),
     );
   }

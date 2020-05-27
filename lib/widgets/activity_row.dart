@@ -11,12 +11,12 @@ class ActivityRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: 75,
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(width: 15),
+          SizedBox(width: 40),
           Container(
             alignment: Alignment.centerRight,
             width: 75,
@@ -24,7 +24,7 @@ class ActivityRow extends StatelessWidget {
               DateFormat.jm().format(date),
               style: TextStyle(
                 color: Colors.black54,
-                fontSize: 15,
+                fontSize: 17,
               ),
             ),
           ),
@@ -42,7 +42,7 @@ class ActivityRow extends StatelessWidget {
               ClipOval(
                 child: Material(
                   color: Color.fromRGBO(53, 74, 95, 1),
-                  child: SizedBox(width: 10, height: 10),
+                  child: SizedBox(width: 20, height: 20),
                 ),
               ),
               Expanded(
@@ -56,7 +56,7 @@ class ActivityRow extends StatelessWidget {
             ],
           ),
           SizedBox(width: 10),
-          Text(text, style: TextStyle(color: Colors.black54, fontSize: 15)),
+          Text(text, style: TextStyle(color: Colors.black54, fontSize: 17)),
         ],
       ),
     );

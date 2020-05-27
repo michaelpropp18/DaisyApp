@@ -19,8 +19,8 @@ class ActivityButton extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            width: 90,
-            height: 90,
+            width: 95,
+            height: 95,
             decoration: new BoxDecoration(
               color: selected ? Colors.green : Colors.black12,
               borderRadius: new BorderRadius.all(new Radius.circular(50.0)),

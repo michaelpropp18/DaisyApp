@@ -36,8 +36,7 @@ class Activities with ChangeNotifier {
       sort();
       notifyListeners();
     } catch (error) {
-      print('error in addItem of activities.dart');
-      print(error);
+      throw(error);
     }
   }
 
