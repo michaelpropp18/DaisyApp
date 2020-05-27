@@ -31,6 +31,7 @@ class Users with ChangeNotifier {
           ));
       userKey = json.decode(response.body)['name'];
     } catch (error) {
+      print('error in addUser of users.dart');
       print(error);
     }
   }
@@ -87,6 +88,7 @@ class Users with ChangeNotifier {
               },
             ))
         .catchError((error) {
+      print('error in updateUserColor of users.dart');
       print(error);
     });
     notifyListeners();

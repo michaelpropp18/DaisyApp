@@ -59,14 +59,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       text: activities.items[index].type,
                       date: activities.items[index].dateTime,
                       isTop: index == 0,
+                      color: activities.items[index].color,
                     ),
                     onDismissed: (_) {
                       activities.removeItem(activities.items[index].id);
                     },
                     background: Container(
                       color: Colors.redAccent,
-                      child:
-                          Icon(Icons.delete, color: Colors.white, size: 40),
+                      child: Icon(Icons.delete, color: Colors.white, size: 40),
                       alignment: Alignment.centerRight,
                       padding: EdgeInsets.only(right: 20),
                     ),

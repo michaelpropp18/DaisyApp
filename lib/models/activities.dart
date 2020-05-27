@@ -27,16 +27,22 @@ class Activities with ChangeNotifier {
             {
               'time': entryTime.toString(),
               'type': type,
+              'userId': Users.user.id,
+              'color': Users.user.color.value.toRadixString(16),
             },
           ));
       final newActivity = Activity(
-          id: json.decode(response.body)['name'],
-          type: type,
-          dateTime: entryTime);
+        id: json.decode(response.body)['name'],
+        type: type,
+        dateTime: entryTime,
+        userId: Users.user.id,
+        color: Users.user.color,
+      );
       _items.insert(0, newActivity);
       sort();
       notifyListeners();
     } catch (error) {
+      print('error in addItem of activities.dart');
       print(error);
     }
   }
@@ -53,9 +59,9 @@ class Activities with ChangeNotifier {
       }
       removedItem = null;
     }).catchError((e) {
+      print('error in removeItem of activities.dart');
       _items.insert(index, removedItem);
       notifyListeners();
-      print('we got an error');
     });
   }
 
@@ -68,14 +74,23 @@ class Activities with ChangeNotifier {
       return;
     }
     extractedData.forEach((id, value) {
-      loadedItems.add(Activity(
+      final act = Activity(
         id: id,
         type: value['type'],
         dateTime: DateTime.parse(value['time']),
-      ));
+      );
+      if (value['color'] != null) {
+        act.color = _colorFromHex(value['color']);
+      }
+      loadedItems.add(act);
     });
     _items = loadedItems;
     sort();
     notifyListeners();
+  }
+
+  Color _colorFromHex(String hexColor) {
+    final hexCode = hexColor.replaceAll('#', '');
+    return Color(int.parse('FF$hexCode', radix: 16));
   }
 }
