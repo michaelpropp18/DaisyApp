@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +17,13 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(
+        new LifecycleEventHandler(resumeCallBack: () async => reset()));
+  }
+
   DateTime entryTime;
   Map<String, bool> selectedActivities = {
     'Pooped': false,
@@ -169,5 +177,18 @@ class _AddScreenState extends State<AddScreen> {
         ],
       ),
     );
+  }
+}
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  final AsyncCallback resumeCallBack;
+
+  LifecycleEventHandler({this.resumeCallBack});
+
+  @override
+  Future<Null> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      await resumeCallBack();
+    }
   }
 }

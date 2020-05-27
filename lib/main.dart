@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: CupertinoApp(
+        theme: CupertinoThemeData(brightness: Brightness.light),
         home: HomeScreen(),
       ),
     );
@@ -30,9 +31,12 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  final CupertinoTabController controller = CupertinoTabController();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+      controller: controller,
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
