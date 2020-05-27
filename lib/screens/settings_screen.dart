@@ -10,6 +10,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  TextEditingController _controller;
   @override
   void initState() {
     Future.delayed(Duration.zero).then((_) {
@@ -17,6 +18,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           .fetchAndSetUsers()
           .catchError((error) {
         print(error);
+      }).then((_) {
+        _controller = new TextEditingController(
+            text: Users.user != null ? Users.user.name : '');
       });
     });
     super.initState();
@@ -35,11 +39,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Colors.purple,
     Colors.brown,
   ];
-
-  Color _colorFromHex(String hexColor) {
-    final hexCode = hexColor.replaceAll('#', '');
-    return Color(int.parse('FF$hexCode', radix: 16));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: CupertinoTextField(
-                    placeholder: 'User',
+                    onChanged: (newName) {
+                      users.updateUserName(newName);
+                    },
+                    controller: _controller,
                   ),
                 ),
                 UserRow('Color', selectedColor),
@@ -81,8 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: colors
                             .map((c) => GestureDetector(
                                   onTap: () => setState(() {
-                                    var test = c.value;
-                                    print(c.value.toRadixString(16));
+                                    users.updateUserColor(c);
                                     selectedColor = Color(int.parse(
                                         'FF${c.value.toRadixString(16)}',
                                         radix: 16));
@@ -98,11 +99,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.only(top: 50.0, bottom: 8.0),
                   child: Text('App Members:'),
                 ),
-                if (users.users != null) Column(
-                  children: users.users.map((user) {
-                    return UserRow(user.name, user.color);
-                  }).toList(),
-                ),
+                if (users.users != null)
+                  Column(
+                    children: users.users.map((user) {
+                      return UserRow(user.name, user.color);
+                    }).toList(),
+                  ),
               ],
             ),
           ),

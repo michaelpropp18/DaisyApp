@@ -7,13 +7,15 @@ import 'user.dart';
 
 class Users with ChangeNotifier {
   static String userKey;
+  static User user;
 
   static Future<void> getUserKey() async {
     final prefs = await SharedPreferences.getInstance();
     userKey = prefs.getString('userKey');
-    if (userKey == null) { // new user
+    if (userKey == null) {
+      // new user
       addUser('Anonymous', Color.fromRGBO(53, 74, 95, 1));
-    } 
+    }
     await prefs.setString('userKey', userKey);
   }
 
@@ -49,6 +51,44 @@ class Users with ChangeNotifier {
       ));
     });
     _users = loadedUsers;
+    if (user == null) {
+      user = _users.firstWhere((u) => u.id == userKey);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateUserName(String name) async {
+    user.name = name;
+    final url = 'https://daisy-app-e36d5.firebaseio.com/users/${user.id}.json';
+    await http
+        .patch(url,
+            body: json.encode(
+              {
+                'name': user.name,
+                'color': user.color.value.toRadixString(16),
+              },
+            ))
+        .catchError((error) {
+      print('error in updateUserName of users.dart');
+      print(error);
+    });
+    notifyListeners();
+  }
+
+  Future<void> updateUserColor(Color color) async {
+    user.color = color;
+    final url = 'https://daisy-app-e36d5.firebaseio.com/users/${user.id}.json';
+    await http
+        .patch(url,
+            body: json.encode(
+              {
+                'name': user.name,
+                'color': color.value.toRadixString(16),
+              },
+            ))
+        .catchError((error) {
+      print(error);
+    });
     notifyListeners();
   }
 
