@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/users.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -7,7 +10,19 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  var selectedColor = Colors.red;
+  @override
+  void initState() {
+    Future.delayed(Duration.zero).then((_) {
+      Provider.of<Users>(context, listen: false)
+          .fetchAndSetUsers()
+          .catchError((error) {
+        print(error);
+      });
+    });
+    super.initState();
+  }
+
+  Color selectedColor = Colors.red;
   var colors = [
     Colors.red,
     Colors.orange,
@@ -21,19 +36,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Colors.brown,
   ];
 
+  Color _colorFromHex(String hexColor) {
+    final hexCode = hexColor.replaceAll('#', '');
+    return Color(int.parse('FF$hexCode', radix: 16));
+  }
+
   @override
   Widget build(BuildContext context) {
-    var children2 = <Widget>[
-      Text('Michael'),
-      Container(
-        width: 18,
-        height: 18,
-        decoration: new BoxDecoration(
-          color: Colors.blue,
-          borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
-        ),
-      ),
-    ];
+    final users = Provider.of<Users>(context);
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           backgroundColor: Color.fromRGBO(53, 74, 95, 1),
@@ -70,8 +80,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: colors
                             .map((c) => GestureDetector(
-                                  onTap: () =>
-                                      setState(() => selectedColor = c),
+                                  onTap: () => setState(() {
+                                    var test = c.value;
+                                    print(c.value.toRadixString(16));
+                                    selectedColor = Color(int.parse(
+                                        'FF${c.value.toRadixString(16)}',
+                                        radix: 16));
+                                  }),
                                   child: ColorCircle(c),
                                 ))
                             .toList(),
@@ -81,12 +96,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 50.0, bottom: 8.0),
-                  child: Text('Other Members:'),
+                  child: Text('App Members:'),
                 ),
-                UserRow('Michael', Colors.green),
-                UserRow('Matthew', Colors.red),
-                UserRow('Megan', Colors.orange),
-                UserRow('Susan', Colors.blue),
+                if (users.users != null) Column(
+                  children: users.users.map((user) {
+                    return UserRow(user.name, user.color);
+                  }).toList(),
+                ),
               ],
             ),
           ),

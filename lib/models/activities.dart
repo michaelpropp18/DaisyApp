@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'activity.dart';
+import 'users.dart';
 
 class Activities with ChangeNotifier {
   static const maxItems = 100;
@@ -18,6 +19,7 @@ class Activities with ChangeNotifier {
   }
 
   Future<void> addItem(String type, DateTime entryTime) async {
+    print(Users.userKey);
     const url = 'https://daisy-app-e36d5.firebaseio.com/activities.json';
     try {
       final response = await http.post(url,
@@ -27,8 +29,10 @@ class Activities with ChangeNotifier {
               'type': type,
             },
           ));
-      final newActivity =
-          Activity(json.decode(response.body)['name'], type, entryTime);
+      final newActivity = Activity(
+          id: json.decode(response.body)['name'],
+          type: type,
+          dateTime: entryTime);
       _items.insert(0, newActivity);
       sort();
       notifyListeners();
@@ -38,9 +42,21 @@ class Activities with ChangeNotifier {
   }
 
   Future<void> removeItem(String id) async {
-    _items.removeWhere((e) => e.id == id);
+    final url = 'https://daisy-app-e36d5.firebaseio.com/activities/$id.json';
+    final index = _items.indexWhere((a) => a.id == id);
+    var removedItem = _items[index];
+    _items.removeAt(index);
     notifyListeners();
-    //const url = 'https://daisy-app-e36d5.firebaseio.com/activities.json';
+    http.delete(url).then((response) {
+      if (response.statusCode >= 400) {
+        throw Exception();
+      }
+      removedItem = null;
+    }).catchError((e) {
+      _items.insert(index, removedItem);
+      notifyListeners();
+      print('we got an error');
+    });
   }
 
   Future<void> fetchAndSetItems() async {
@@ -53,9 +69,9 @@ class Activities with ChangeNotifier {
     }
     extractedData.forEach((id, value) {
       loadedItems.add(Activity(
-        id,
-        value['type'],
-        DateTime.parse(value['time']),
+        id: id,
+        type: value['type'],
+        dateTime: DateTime.parse(value['time']),
       ));
     });
     _items = loadedItems;

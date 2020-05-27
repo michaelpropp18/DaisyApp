@@ -1,19 +1,14 @@
+import 'package:flutter/cupertino.dart';
+
 class Activity {
-  final String _type;
-  final DateTime _dateTime;
-  final String _id;
+  final String type;
+  final DateTime dateTime;
+  final String id;
+  String userId;
 
-  Activity(this._id, this._type, this._dateTime);
-
-  DateTime get dateTime {
-    return _dateTime;
-  }
-
-  String get type {
-    return _type;
-  }
-
-  String get id {
-    return _id;
-  }
+  Activity(
+      {@required this.id,
+      @required this.type,
+      @required this.dateTime,
+      this.userId});
 }

@@ -1,3 +1,4 @@
+import 'package:daisy_app/models/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,6 @@ class SummaryScreen extends StatefulWidget {
 }
 
 class _SummaryScreenState extends State<SummaryScreen> {
-  var _selectedIndex = -1;
   @override
   void initState() {
     Future.delayed(Duration.zero).then((_) {
@@ -27,6 +27,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       });
     });
     super.initState();
+    Users.getUserKey();
   }
 
   @override
@@ -51,58 +52,47 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         activities.items[index].dateTime.day !=
                             activities.items[index - 1].dateTime.day))
                   DateDivider(activities.items[index].dateTime),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (_selectedIndex == index) {
-                        _selectedIndex = -1;
-                      } else {
-                        _selectedIndex = index;
-                      }
-                    });
-                  },
-                  child: Dismissible(
-                      key: ValueKey(activities.items[index].id),
-                      direction: DismissDirection.endToStart,
-                      child: ActivityRow(
-                        text: activities.items[index].type,
-                        date: activities.items[index].dateTime,
-                        isTop: index == 0,
-                      ),
-                      onDismissed: (_) {
-                        activities.removeItem(activities.items[index].id);
-                      },
-                      background: Container(
-                        color: Colors.redAccent,
-                        child:
-                            Icon(Icons.delete, color: Colors.white, size: 40),
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 20),
-                      ),
-                      confirmDismiss: (_) {
-                        return showCupertinoDialog(
-                            context: context,
-                            builder: (ctx) => CupertinoAlertDialog(
-                                  title: Text('Delete Item'),
-                                  content: Text(
-                                      'Are you sure you would like to delete this item?'),
-                                  actions: <Widget>[
-                                    CupertinoDialogAction(
-                                      child: Text('Yes'),
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop(true);
-                                      },
-                                    ),
-                                    CupertinoDialogAction(
-                                      child: Text('No'),
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop(false);
-                                      },
-                                    ),
-                                  ],
-                                ));
-                      }),
-                ),
+                Dismissible(
+                    key: ValueKey(activities.items[index].id),
+                    direction: DismissDirection.endToStart,
+                    child: ActivityRow(
+                      text: activities.items[index].type,
+                      date: activities.items[index].dateTime,
+                      isTop: index == 0,
+                    ),
+                    onDismissed: (_) {
+                      activities.removeItem(activities.items[index].id);
+                    },
+                    background: Container(
+                      color: Colors.redAccent,
+                      child:
+                          Icon(Icons.delete, color: Colors.white, size: 40),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                    ),
+                    confirmDismiss: (_) {
+                      return showCupertinoDialog(
+                          context: context,
+                          builder: (ctx) => CupertinoAlertDialog(
+                                title: Text('Delete Item'),
+                                content: Text(
+                                    'Are you sure you would like to delete this item?'),
+                                actions: <Widget>[
+                                  CupertinoDialogAction(
+                                    child: Text('Yes'),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop(true);
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    child: Text('No'),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop(false);
+                                    },
+                                  ),
+                                ],
+                              ));
+                    }),
               ],
             );
           },
