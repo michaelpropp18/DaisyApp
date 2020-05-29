@@ -10,11 +10,11 @@ class DateDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.grey,
-      height: 25,
+      height: 35,
       width: double.infinity,
       child: Center(
         child: Text(DateFormat.yMMMMd('en_US').format(date),
-            style: TextStyle(color: Colors.white)),
+            style: TextStyle(color: Colors.white, fontSize: 20)),
       ),
     );
   }

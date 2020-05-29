@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -5,18 +6,19 @@ import 'package:flutter/material.dart';
 
 import './screens/summary_screen.dart';
 import './screens/add_screen.dart';
-import './screens/settings_screen.dart';
 import './models/activities.dart';
-import './models/users.dart';
 
 void main() {
-  //SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -24,18 +26,9 @@ class MyApp extends StatelessWidget {
           //use value for existing objects & lists
           //use create for new objectss
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => Users(),
-          //use value for existing objects & lists
-          //use create for new objects
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => Users(),
-          //use value for existing objects & lists
-          //use create for new objects
-        ),
       ],
       child: CupertinoApp(
+        theme: CupertinoThemeData(brightness: Brightness.light),
         home: HomeScreen(),
       ),
     );
@@ -43,9 +36,12 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  final CupertinoTabController controller = CupertinoTabController();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+      controller: controller,
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
@@ -55,10 +51,6 @@ class HomeScreen extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.add_circled),
             title: Text('Add'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.settings),
-            title: Text('Settings'),
           ),
         ],
       ),
@@ -73,11 +65,6 @@ class HomeScreen extends StatelessWidget {
           case 1:
             returnValue = CupertinoTabView(builder: (_) {
               return AddScreen();
-            });
-            break;
-          case 2:
-            returnValue = CupertinoTabView(builder: (_) {
-              return SettingsScreen();
             });
             break;
           default:

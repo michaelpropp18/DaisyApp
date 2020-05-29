@@ -1,4 +1,3 @@
-import 'package:daisy_app/models/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,12 +26,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
       });
     });
     super.initState();
-    Users.getUserKey();
   }
 
   @override
   Widget build(BuildContext context) {
     final activities = Provider.of<Activities>(context);
+    activities.fetchAndSetItems();
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: Color.fromRGBO(53, 74, 95, 1),
@@ -56,10 +55,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     key: ValueKey(activities.items[index].id),
                     direction: DismissDirection.endToStart,
                     child: ActivityRow(
-                      text: activities.items[index].type,
+                      text: activities.items[index].name == '' ? activities.items[index].type : '${activities.items[index].type} (${activities.items[index].name})',
                       date: activities.items[index].dateTime,
                       isTop: index == 0,
-                      color: activities.items[index].color,
                     ),
                     onDismissed: (_) {
                       activities.removeItem(activities.items[index].id);

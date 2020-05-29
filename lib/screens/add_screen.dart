@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/activity_button.dart';
@@ -10,10 +10,21 @@ import '../models/activities.dart';
 
 class AddScreen extends StatefulWidget {
   @override
-  _AddScreenState createState() => _AddScreenState();
+  _AddScreenState createState() {
+    return _AddScreenState();
+  }
 }
 
 class _AddScreenState extends State<AddScreen> {
+  TextEditingController _textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(
+        new LifecycleEventHandler(resumeCallBack: () async => reset()));
+  }
+
   DateTime entryTime;
   Map<String, bool> selectedActivities = {
     'Pooped': false,
@@ -74,11 +85,12 @@ class _AddScreenState extends State<AddScreen> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Column(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            SizedBox(height: 25,),
+            Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Row(
@@ -88,18 +100,17 @@ class _AddScreenState extends State<AddScreen> {
                         icon: guidedog,
                         text: 'Walk',
                         selected: selectedActivities['Walk'],
-                        onPressed: () =>
-                            updateSelectedActivities('Walk'),
+                        onPressed: () => updateSelectedActivities('Walk'),
                       ),
                       ActivityButton(
                         icon: Icons.restaurant,
                         text: 'Fed',
                         selected: selectedActivities['Fed'],
-                        onPressed: () =>
-                            updateSelectedActivities('Fed'),
+                        onPressed: () => updateSelectedActivities('Fed'),
                       ),
                     ],
                   ),
+                  SizedBox(height: 25,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -107,69 +118,95 @@ class _AddScreenState extends State<AddScreen> {
                         icon: fire_hydrant,
                         text: 'Pee',
                         selected: selectedActivities['Peed'],
-                        onPressed: () =>
-                            updateSelectedActivities('Peed'),
+                        onPressed: () => updateSelectedActivities('Peed'),
                       ),
                       ActivityButton(
                         icon: poop,
                         text: 'Poop',
                         selected: selectedActivities['Pooped'],
-                        onPressed: () =>
-                            updateSelectedActivities('Pooped'),
+                        onPressed: () => updateSelectedActivities('Pooped'),
                       ),
                     ],
                   ),
                 ]),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+                SizedBox(height: 25,),
+            Column(
               children: <Widget>[
-                Text('Time: ' + DateFormat.jm().format(entryTime),
-                    style: TextStyle(fontSize: 20)),
                 SizedBox(
-                  width: 10,
+                  height: 25,
                 ),
                 EditTime(entryTime, updateNewTime),
+                SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Name: ', style: TextStyle(fontSize: 20)),
+                    Container(
+                        width: 100,
+                        child: CupertinoTextField(controller: _textController)),
+                  ],
+                ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: CupertinoButton(
-              color: Color.fromRGBO(53, 74, 95, 1),
-              disabledColor: Colors.grey,
-              child: Text('Add Entry'),
-              onPressed: () {
-                if (itemSelected()) {
-                  selectedActivities.forEach((k, v) {
-                    if (v) {
-                      activities.addItem(k, entryTime);
-                    }
-                  });
-                }
-                showCupertinoDialog(
-                    context: context,
-                    builder: (ctx) => CupertinoAlertDialog(
-                          title: Text(itemSelected()
-                              ? 'Activity Added'
-                              : 'Please select an activity'),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                              child: Text('Ok'),
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                                reset();
-                              },
-                            ),
-                          ],
-                        ));
-              },
+            SizedBox(
+                  height: 25,
+                ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: CupertinoButton(
+                color: Color.fromRGBO(53, 74, 95, 1),
+                disabledColor: Colors.grey,
+                child: Text('Add Entry'),
+                onPressed: () {
+                  if (itemSelected()) {
+                    selectedActivities.forEach((k, v) {
+                      if (v) {
+                        activities.addItem(
+                            k,
+                            entryTime,
+                            _textController.text == null
+                                ? ''
+                                : _textController.text);
+                      }
+                    });
+                  }
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (ctx) => CupertinoAlertDialog(
+                            title: Text(itemSelected()
+                                ? 'Activity Added'
+                                : 'Please select an activity'),
+                            actions: <Widget>[
+                              CupertinoDialogAction(
+                                child: Text('Ok'),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                  reset();
+                                },
+                              ),
+                            ],
+                          ));
+                },
+              ),
             ),
-          ),
-          SizedBox(height: kBottomNavigationBarHeight),
-        ],
+          ],
+        ),
       ),
     );
+  }
+}
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  final AsyncCallback resumeCallBack;
+
+  LifecycleEventHandler({this.resumeCallBack});
+
+  @override
+  Future<Null> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      await resumeCallBack();
+    }
   }
 }
