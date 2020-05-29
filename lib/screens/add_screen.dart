@@ -16,6 +16,8 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+  TextEditingController _textController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -83,11 +85,12 @@ class _AddScreenState extends State<AddScreen> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Column(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            SizedBox(height: 25,),
+            Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Row(
@@ -107,6 +110,7 @@ class _AddScreenState extends State<AddScreen> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 25,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -125,45 +129,70 @@ class _AddScreenState extends State<AddScreen> {
                     ],
                   ),
                 ]),
-          ),
-          Expanded(
-            child: EditTime(entryTime, updateNewTime),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: CupertinoButton(
-              color: Color.fromRGBO(53, 74, 95, 1),
-              disabledColor: Colors.grey,
-              child: Text('Add Entry'),
-              onPressed: () {
-                if (itemSelected()) {
-                  selectedActivities.forEach((k, v) {
-                    if (v) {
-                      activities.addItem(k, entryTime);
-                    }
-                  });
-                }
-                showCupertinoDialog(
-                    context: context,
-                    builder: (ctx) => CupertinoAlertDialog(
-                          title: Text(itemSelected()
-                              ? 'Activity Added'
-                              : 'Please select an activity'),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                              child: Text('Ok'),
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                                reset();
-                              },
-                            ),
-                          ],
-                        ));
-              },
+                SizedBox(height: 25,),
+            Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 25,
+                ),
+                EditTime(entryTime, updateNewTime),
+                SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Name: ', style: TextStyle(fontSize: 20)),
+                    Container(
+                        width: 100,
+                        child: CupertinoTextField(controller: _textController)),
+                  ],
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 2 * kBottomNavigationBarHeight),
-        ],
+            SizedBox(
+                  height: 25,
+                ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: CupertinoButton(
+                color: Color.fromRGBO(53, 74, 95, 1),
+                disabledColor: Colors.grey,
+                child: Text('Add Entry'),
+                onPressed: () {
+                  if (itemSelected()) {
+                    selectedActivities.forEach((k, v) {
+                      if (v) {
+                        activities.addItem(
+                            k,
+                            entryTime,
+                            _textController.text == null
+                                ? ''
+                                : _textController.text);
+                      }
+                    });
+                  }
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (ctx) => CupertinoAlertDialog(
+                            title: Text(itemSelected()
+                                ? 'Activity Added'
+                                : 'Please select an activity'),
+                            actions: <Widget>[
+                              CupertinoDialogAction(
+                                child: Text('Ok'),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                  reset();
+                                },
+                              ),
+                            ],
+                          ));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

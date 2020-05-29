@@ -17,7 +17,7 @@ class Activities with ChangeNotifier {
     _items.sort((a, b) => b.dateTime.compareTo(a.dateTime));
   }
 
-  Future<void> addItem(String type, DateTime entryTime) async {
+  Future<void> addItem(String type, DateTime entryTime, String name) async {
     const url = 'https://daisy-app-e36d5.firebaseio.com/activities.json';
     try {
       final response = await http.post(url,
@@ -25,12 +25,14 @@ class Activities with ChangeNotifier {
             {
               'time': entryTime.toString(),
               'type': type,
+              'name': name,
             },
           ));
       final newActivity = Activity(
         id: json.decode(response.body)['name'],
         type: type,
         dateTime: entryTime,
+        name: name,
       );
       _items.insert(0, newActivity);
       sort();
@@ -71,6 +73,7 @@ class Activities with ChangeNotifier {
         id: id,
         type: value['type'],
         dateTime: DateTime.parse(value['time']),
+        name: value['name'] == null ? '' : value['name']
       ));
     });
     _items = loadedItems;

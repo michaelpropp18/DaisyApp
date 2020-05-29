@@ -55,7 +55,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     key: ValueKey(activities.items[index].id),
                     direction: DismissDirection.endToStart,
                     child: ActivityRow(
-                      text: activities.items[index].type,
+                      text: activities.items[index].name == '' ? activities.items[index].type : '${activities.items[index].type} (${activities.items[index].name})',
                       date: activities.items[index].dateTime,
                       isTop: index == 0,
                     ),
